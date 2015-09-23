@@ -3,26 +3,19 @@ checkout:
     - circle/checkout_post.sh
 dependencies:
   cache_directories:
-    - elasticsearch-0.90.10
-    - sites/peach/vendor/bundle
-    - sites/yoshi/vendor/bundle
-  pre: 
-    - if [[ ! -e elasticsearch-0.90.10/bin/elasticsearch ]]; then wget https://download.elasticsearch.org/elasticsearch/elasticsearch/elasticsearch-0.90.10.tar.gz && tar -xvf elasticsearch-0.90.10.tar.gz; fi
-    - elasticsearch-0.90.10/bin/elasticsearch:
-        background: true
+    - sites/*/vendor/bundle
   override:
     - circle/dependencies_override.sh
 general:
   artifacts:
-    - "peach/tmp/capybara"
-    - "peach/coverage"
-    - "yoshi/tmp/capybara"
-    - "yoshi/coverage"
+    - "sites/*/tmp/capybara"
+    - "sites/*/coverage"
 database:
   override:
     - circle/database_override.sh
 test:
   override:
+    # put site label in command so it's clear in the circle interface what is currently running
     - ../../circle/test_override.sh PEACH:
         pwd: sites/peach
         parallel: true
